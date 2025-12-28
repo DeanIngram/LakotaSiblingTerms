@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Lakota Siblings</title>
+<style>
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background:#FFF; 
+    padding:20px;
+  }
+
+  .container { 
+    max-width: 1050px; 
+    margin:auto; 
+    background:#AFD6FF; 
+    padding:20px; 
+    border-radius:8px;
+  }
+
+  h1 {
+    margin-top:0;
+    margin-bottom:10px;
+  }
+
+  .headline {
+    font-size:24px;
+    padding:0px;
+    line-height: 24px;
+    margin: 0px;
+  }
+  .controls {
+    display:grid;
+    grid-template-columns: 1fr 3fr;
+    gap:16px;
+    margin-bottom:18px;
+  }
+
+  .control label {
+    display:block;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+
+  .control select {
+    width:100%;
+    padding:10px;
+    font-size:16px;
+
+    background:#ffffff;
+    border:1px solid #000000;
+    border-radius:6px;
+    color:#000;
+
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+
+    /* simple dropdown arrow */
+    background-image:
+      linear-gradient(45deg, transparent 50%, #000 50%),
+      linear-gradient(135deg, #000 50%, transparent 50%);
+    background-position:
+      calc(100% - 20px) calc(50% - 4px),
+      calc(100% - 14px) calc(50% - 4px);
+    background-size:6px 6px;
+    background-repeat:no-repeat;
+  }
+
+  .control select:focus {
+    outline:none;
+    box-shadow:0 0 0 2px rgba(0,0,0,0.25);
+  }
+
+  .sibling-inputs {
+  display:grid;
+  grid-template-columns: repeat(4, 120px);
+  gap:20px;
+  justify-content: flex-start;
+}
+
+  .sibling-input label {
+    display:block;
+    font-weight:600;
+    margin-bottom:6px;
+    font-size:14px;
+    max-width:120px;
+  }
+
+  .sibling-input input[type="number"] {
+    width:100%;
+    max-width:120px;
+    padding:6px 8px;
+    font-size:16px;
+    border:1px solid #000;
+    border-radius:6px;
+    text-align:right;
+  }
+
+  .control select, .sibling-input input[type="number"] {
+    height: 44px;
+    box-sizing: border-box;
+  }
+  
+  .divider {
+    height:1px;
+    background:#e6e6e6;
+    margin:20px 0;
+  }
+
+  .row {
+    display:flex;
+    align-items:flex-start;
+    gap:20px;
+    margin-top:16px;
+  }
+
+  .image-placeholder {
+    width:250px;
+    height:250px;
+    background:#ddd;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#666;
+    text-align:center;
+    flex-shrink:0;
+    border:1px solid black;
+    overflow:hidden; /* rounded border fix */
+  }
+
+  .image-placeholder img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:inherit;
+  }
+
+  .outputWrap { flex:1; }
+
+  .outputTitle {
+    font-weight:700;
+    margin:0 0 8px;
+  }
+
+  .lines {
+    background:#f0f0f0;
+    border-radius:6px;
+    padding:12px;
+    min-height:80px;
+  }
+
+  .line {
+    margin-bottom:8px;
+  }
+
+  .lakota {
+    font-size:20px;
+  }
+
+  .english {
+    font-size:13px;
+    color:#555;
+  }
+
+  .muted {
+    color:#888;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="headline">
+    <h1>Lakota Sibling terms</h1>
+  </div> <div class="divider"></div>
+  <!-- Top Controls -->
+  <div class="controls">
+    <div class="control">
+      <label for="personSelect">Grammatical person</label>
+      <select id="personSelect">
+        <option value="">— Select person —</option>
+        <option value="p1">1st singular (I have)</option>
+        <option value="p2s">2nd singular (you have)</option>
+        <option value="p3s">3rd singular (he/she has)</option>
+      </select>
+    </div>
+
+    <div class="control">
+<!-- 
+      <label>Siblings (0–10)</label>
+ -->
+      <div class="sibling-inputs">
+        <div class="sibling-input">
+          <label for="olderBroInput">Older Brothers</label>
+          <input type="number" id="olderBroInput" min="0" max="10" value="0" />
+        </div>
+        <div class="sibling-input">
+          <label for="youngerBroInput">Younger Brothers</label>
+          <input type="number" id="youngerBroInput" min="0" max="10" value="0" />
+        </div>
+        <div class="sibling-input">
+          <label for="olderSisInput">Older Sisters</label>
+          <input type="number" id="olderSisInput" min="0" max="10" value="0" />
+        </div>
+        <div class="sibling-input">
+          <label for="youngerSisInput">Younger Sisters</label>
+          <input type="number" id="youngerSisInput" min="0" max="10" value="0" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Male Speaker -->
+  <div class="row">
+    <div class="image-placeholder">
+      <img src="images/man.jpg" alt="Male speaker">
+    </div>
+    <div class="outputWrap">
+<!-- 
+      <div class="outputTitle">Male Speaker</div>
+ -->
+      <div class="lines" id="maleLines">
+        <span class="muted">Choose person and enter sibling counts.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Female Speaker -->
+  <div class="row">
+    <div class="image-placeholder">
+      <img src="images/woman.jpg" alt="Female speaker">
+    </div>
+    <div class="outputWrap">
+<!-- 
+      <div class="outputTitle">Female Speaker</div>
+ -->
+      <div class="lines" id="femaleLines">
+        <span class="muted">Choose person and enter sibling counts.</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// =======================
+// KINSHIP-STYLE DATA (from your snippet)
+// =======================
+
+const relationships = {
+  older_brother: {
+    label: "Older brother",
+    speakers: {
+      male: {
+        forms: {
+          p1:  { term: "Čhiyé" },
+          p2s: { term: "Ničíye" },
+          p3s: { term: "Čhiyéku" }
+        }
+      },
+      female: {
+        forms: {
+          p1:  { term: "Thibló" },
+          p2s: { term: "Nithíblo" },
+          p3s: { term: "Thiblóku" }
+        }
+      }
+    }
+  },
+
+  younger_brother: {
+    label: "Younger brother",
+    speakers: {
+      both: {
+        forms: {
+          p1:  { term: "Misúŋka" },
+          p2s: { term: "Nisúŋka" },
+          p3s: { term: "Suŋkáku" }
+        }
+      }
+    }
+  },
+
+  older_sister: {
+    label: "Older sister",
+    speakers: {
+      male: {
+        forms: {
+          p1:  { term: "Tȟaŋké" },
+          p2s: { term: "Nitȟáŋke" },
+          p3s: { term: "Tȟaŋkéku" }
+        }
+      },
+      female: {
+        forms: {
+          p1:  { term: "Čhuwé" },
+          p2s: { term: "Ničhúwe" },
+          p3s: { term: "čhuwéku" }
+        }
+      }
+    }
+  },
+
+  younger_sister: {
+    label: "Younger sister",
+    speakers: {
+      male: {
+        forms: {
+          p1:  { term: "Tȟaŋkší" },
+          p2s: { term: "Nitȟáŋkši" },
+          p3s: { term: "Tȟaŋkšítku" }
+        }
+      },
+      female: {
+        forms: {
+          p1:  { term: "Mitȟáŋka" },
+          p2s: { term: "Nitȟáŋka" },
+          p3s: { term: "Tȟaŋkáku" }
+        }
+      }
+    }
+  }
+};
+
+// =======================
+// NUMBER SYSTEM
+// =======================
+
+// For sibling-category lines (with -pi plurals):
+// 0 -> waníče
+// 1 -> waŋží
+// 2 -> núŋpapi
+// ...
+// >10 -> wikčémnapi isáŋm
+const NUMBER_TERMS_PLURAL = {
+  0:  "waníče",
+  1:  "waŋží",
+  2:  "núŋpapi",
+  3:  "yámnipi",
+  4:  "tópapi",
+  5:  "zaptáŋpi",
+  6:  "šákpepi",
+  7:  "šakówiŋpi",
+  8:  "šagloǧáŋpi",
+  9:  "napčíyuŋkapi",
+  10: "wikčémnapi"
+};
+const MORE_THAN_TEN_PHRASE = "Wikčémna isáŋm";
+
+// Bare cardinals for totals (no -pi)
+const CARDINAL_TERMS = {
+  1:  "Waŋží",
+  2:  "Núŋpa",
+  3:  "Yámni",
+  4:  "Tópa",
+  5:  "Zaptáŋ",
+  6:  "Šákpe",
+  7:  "Šakówiŋ",
+  8:  "Šagloǧáŋ",
+  9:  "Napčíyuŋka",
+  10: "Wikčémna"
+};
+const MORE_THAN_TEN_CARDINAL = "Wikčémna isáŋm";
+
+// Sibling total roots (singular forms)
+const SIBLING_TOTAL_ROOT = {
+  p1:  "Wimáčhowe",
+  p2s: "Winíčhowe",
+  p3s: "Wičhówe"
+};
+
+// No-siblings special sentences
+const NO_SIBLINGS_TOTAL = {
+  p1:  "Wimáčhowe waníčé.",
+  p2s: "Winíčhowe waníčé.",
+  p3s: "Wičhówe waníčé."
+};
+
+// =======================
+// ENGLISH GLOSSES
+// =======================
+
+const PERSON_CONFIG = {
+  p1:  { subject: "I",       auxHave: "have" },
+  p2s: { subject: "You",     auxHave: "have" },
+  p3s: { subject: "He/She",  auxHave: "has" }
+};
+
+const EN_RELATION_LABELS = {
+  older_brother:   { singular: "older brother",   plural: "older brothers" },
+  younger_brother: { singular: "younger brother", plural: "younger brothers" },
+  older_sister:    { singular: "older sister",    plural: "older sisters" },
+  younger_sister:  { singular: "younger sister",  plural: "younger sisters" }
+};
+
+// =======================
+// HELPERS
+// =======================
+
+function clampCount(value) {
+  const n = parseInt(value, 10);
+  if (isNaN(n) || n < 0) return 0;
+  if (n > 10) return 10;
+  return n;
+}
+
+// Number phrase for category lines (with -pi plurals)
+function getNumberPhraseForSiblings(count) {
+  if (count <= 0) return NUMBER_TERMS_PLURAL[0];
+  if (count === 1) return NUMBER_TERMS_PLURAL[1];
+  if (count >= 2 && count <= 10) return NUMBER_TERMS_PLURAL[count];
+  return MORE_THAN_TEN_PHRASE;
+}
+
+// Bare cardinal for totals
+function getCardinalForTotal(count) {
+  if (count <= 0) return null;
+  if (count >= 1 && count <= 10) return CARDINAL_TERMS[count];
+  return MORE_THAN_TEN_CARDINAL;
+}
+
+// Lookup kinship term based on relation, speaker, and person
+function getKinshipTerm(relationKey, speaker, personId) {
+  const rel = relationships[relationKey];
+  if (!rel) return "";
+
+  const speakerData =
+    rel.speakers?.[speaker] ??
+    rel.speakers?.both ??
+    null;
+  if (!speakerData || !speakerData.forms) return "";
+
+  const forms = speakerData.forms;
+  const entry = forms[personId] || forms.p1;
+  return entry?.term || "";
+}
+
+// Build sibling phrase: kinship term + number phrase
+function buildLakotaSiblingPhrase(baseTerm, count) {
+  if (!baseTerm) return "";
+  const numPhrase = getNumberPhraseForSiblings(count);
+  return `${baseTerm} ${numPhrase}`;
+}
+
+function buildEnglishSiblingGloss(personId, relationKey, count) {
+  const cfg = PERSON_CONFIG[personId];
+  if (!cfg) return "";
+
+  const labelInfo = EN_RELATION_LABELS[relationKey];
+  const relationPhrase = (count === 1)
+    ? (labelInfo ? labelInfo.singular : relationKey)
+    : (labelInfo ? labelInfo.plural   : relationKey + "s");
+
+  if (count === 0) {
+    return `${cfg.subject} ${cfg.auxHave} no ${relationPhrase}.`;
+  }
+
+  return `${cfg.subject} ${cfg.auxHave} ${count} ${relationPhrase}.`;
+}
+
+// Total siblings line:
+// 0  -> special sentence: "wimáčhowe waníčé" etc
+// 1  -> "waŋží kičhí wimáčhowe"
+// >1 -> "zaptáŋ ób wičhówe", etc
+function buildLakotaTotalLine(personId, total) {
+  if (total === 0) {
+    return NO_SIBLINGS_TOTAL[personId] || "";
+  }
+
+  const root = SIBLING_TOTAL_ROOT[personId];
+  if (!root) return "";
+
+  const cardinal = getCardinalForTotal(total);
+  if (!cardinal) return "";
+
+  if (total === 1) {
+    return `${cardinal} kičhí ${root}`;
+  }
+
+  // more than one
+  return `${cardinal} ób ${root}`;
+}
+
+function buildEnglishTotalGloss(personId, total) {
+  const cfg = PERSON_CONFIG[personId];
+  if (!cfg) return "";
+
+  if (total === 0) {
+    return `${cfg.subject} ${cfg.auxHave} no siblings.`;
+  }
+
+  if (total > 10) {
+    // Match the Lakota "wikčémnapi isáŋm" – more than ten
+    return `${cfg.subject} ${cfg.auxHave} more than ten siblings.`;
+  }
+
+  return `${cfg.subject} ${cfg.auxHave} ${total} sibling${total === 1 ? "" : "s"}.`;
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function ensurePeriod(str) {
+  if (!str) return str;
+  const trimmed = str.trim();
+  if (!trimmed) return str;
+  // If it already ends with punctuation, don’t double up
+  if (/[.!?]$/.test(trimmed)) return trimmed;
+  return trimmed + ".";
+}
+
+// =======================
+// MAIN UPDATE
+// =======================
+
+function updateOutputs() {
+  const personId = document.getElementById("personSelect").value;
+  const olderBro = clampCount(document.getElementById("olderBroInput").value);
+  const youngerBro = clampCount(document.getElementById("youngerBroInput").value);
+  const olderSis = clampCount(document.getElementById("olderSisInput").value);
+  const youngerSis = clampCount(document.getElementById("youngerSisInput").value);
+
+  document.getElementById("olderBroInput").value = olderBro;
+  document.getElementById("youngerBroInput").value = youngerBro;
+  document.getElementById("olderSisInput").value = olderSis;
+  document.getElementById("youngerSisInput").value = youngerSis;
+
+  const maleBox = document.getElementById("maleLines");
+  const femaleBox = document.getElementById("femaleLines");
+
+  if (!personId) {
+    const msg = `<span class="muted">Choose person and enter sibling counts.</span>`;
+    maleBox.innerHTML = msg;
+    femaleBox.innerHTML = msg;
+    return;
+  }
+
+  const total = olderBro + youngerBro + olderSis + youngerSis;
+  const linesMale = [];
+  const linesFemale = [];
+
+  function addCategoryLines(relationKey, count) {
+    const maleTerm = getKinshipTerm(relationKey, "male", personId);
+    const femaleTerm = getKinshipTerm(relationKey, "female", personId);
+
+  const lakotaMale = maleTerm
+    ? ensurePeriod(buildLakotaSiblingPhrase(maleTerm, count))
+    : "";
+  const lakotaFemale = femaleTerm
+    ? ensurePeriod(buildLakotaSiblingPhrase(femaleTerm, count))
+    : "";
+
+    const english = buildEnglishSiblingGloss(personId, relationKey, count);
+
+    if (lakotaMale) {
+      linesMale.push(`
+        <div class="line">
+          <div class="lakota">${escapeHtml(lakotaMale)}</div>
+          <div class="english">${escapeHtml(english)}</div>
+        </div>
+      `);
+    }
+
+    if (lakotaFemale) {
+      linesFemale.push(`
+        <div class="line">
+          <div class="lakota">${escapeHtml(lakotaFemale)}</div>
+          <div class="english">${escapeHtml(english)}</div>
+        </div>
+      `);
+    }
+  }
+
+  addCategoryLines("older_brother", olderBro);
+  addCategoryLines("younger_brother", youngerBro);
+  addCategoryLines("older_sister", olderSis);
+  addCategoryLines("younger_sister", youngerSis);
+
+  // Total siblings
+  const totalLakota = buildLakotaTotalLine(personId, total);
+  const totalEnglish = buildEnglishTotalGloss(personId, total);
+
+  if (totalLakota) {
+    linesMale.push(`
+      <div class="line">
+        <div class="lakota">${escapeHtml(totalLakota)}</div>
+        <div class="english">${escapeHtml(totalEnglish)}</div>
+      </div>
+    `);
+    linesFemale.push(`
+      <div class="line">
+        <div class="lakota">${escapeHtml(totalLakota)}</div>
+        <div class="english">${escapeHtml(totalEnglish)}</div>
+      </div>
+    `);
+  }
+
+  maleBox.innerHTML = linesMale.length
+    ? linesMale.join("")
+    : `<span class="muted">No siblings entered.</span>`;
+
+  femaleBox.innerHTML = linesFemale.length
+    ? linesFemale.join("")
+    : `<span class="muted">No siblings entered.</span>`;
+}
+
+// =======================
+// WIRE EVENTS
+// =======================
+
+document.getElementById("personSelect").addEventListener("change", updateOutputs);
+document.getElementById("olderBroInput").addEventListener("input", updateOutputs);
+document.getElementById("youngerBroInput").addEventListener("input", updateOutputs);
+document.getElementById("olderSisInput").addEventListener("input", updateOutputs);
+document.getElementById("youngerSisInput").addEventListener("input", updateOutputs);
+
+// Initial display
+updateOutputs();
+</script>
+
+</body>
+</html>
